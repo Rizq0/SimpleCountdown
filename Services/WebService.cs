@@ -20,9 +20,13 @@ namespace ArcRaidersCountdown.Services
         {
             try
             {
-                var response = await _httpClient.GetAsync(webhookUrl);
+                var payload = new { content = message };
+                var json = System.Text.Json.JsonSerializer.Serialize(payload);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+                var response = await _httpClient.PostAsync(webhookUrl, content);
                 response.EnsureSuccessStatusCode();
                 var responseBody = await response.Content.ReadAsStringAsync();
+                Console.WriteLine($"Response from Discord: {responseBody}");
                 return responseBody;
             }
             catch (HttpRequestException e)
