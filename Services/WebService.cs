@@ -16,7 +16,7 @@ namespace ArcRaidersCountdown.Services
             _httpClient = httpClient;
         }
 
-        public async Task<string> SendDiscordMessage(string webhookUrl, string message)
+        public async Task SendDiscordMessage(string webhookUrl, string message)
         {
             try
             {
@@ -26,14 +26,11 @@ namespace ArcRaidersCountdown.Services
                 var response = await _httpClient.PostAsync(webhookUrl, content);
                 response.EnsureSuccessStatusCode();
                 var responseBody = await response.Content.ReadAsStringAsync();
-                Console.WriteLine($"Response from Discord: {responseBody}");
-                return responseBody;
             }
             catch (HttpRequestException e)
             {
                 string errorMessage = $"Request error: {e.Message}";
                 Console.WriteLine(errorMessage);
-                return errorMessage;
             }
 
         }

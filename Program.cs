@@ -15,7 +15,7 @@ class Program
         DateTime releaseDate = new DateTime(2025, 10, 30);
         DateTime today = DateTime.Today;
         string countdownMessage = CountdownService.GetCountdownMessage(today, releaseDate);
-        Console.WriteLine("Webhook loaded? " + (webhookUrl != null));
+
         int daysUntilRelease = (releaseDate - today).Days;
         if (daysUntilRelease < 0)
         {
@@ -29,11 +29,9 @@ class Program
             return;
         }
 
-        var service = new WebService(new HttpClient());
-        string postToDiscord = await service.SendDiscordMessage(webhookUrl, countdownMessage);
-
-        Console.WriteLine(countdownMessage);
-        Console.WriteLine(postToDiscord);
+        using var httpClient = new HttpClient();
+        var service = new WebService(httpClient);
+        await service.SendDiscordMessage(webhookUrl, countdownMessage);
     }
 }
 
