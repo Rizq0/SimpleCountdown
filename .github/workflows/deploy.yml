@@ -26,4 +26,6 @@ jobs:
       - name: Run the countdown
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+          SERVICE: ${{ secrets.SERVICE }}
+          TARGET: ${{ secrets.TARGET }}
         run: dotnet run --configuration Release
