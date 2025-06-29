@@ -1,8 +1,8 @@
-﻿using ArcRaidersCountdown.Services;
+﻿using SimpleCountdown.Services;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Net.Http;
-using ArcRaidersCountdown;
+using SimpleCountdown;
 
 class Program
 {     static async Task Main(string[] args)

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Net.Http;
 
-namespace ArcRaidersCountdown.Services
+namespace SimpleCountdown.Services
 {
     internal class ArcRaidersService
     {
