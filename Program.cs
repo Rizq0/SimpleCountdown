@@ -2,36 +2,44 @@
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Net.Http;
+using ArcRaidersCountdown;
+
 class Program
 {     static async Task Main(string[] args)
     {
-
-        var config = new ConfigurationBuilder()
-           .AddUserSecrets<Program>()
-           .AddEnvironmentVariables()    
-           .Build();
-        var webhookUrl = config["DISCORD_WEBHOOK"];
-
-        DateTime releaseDate = new DateTime(2025, 10, 30);
+        AppConfig config;
+        try
+        {
+            config = new AppConfig();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Config Error: {ex}");
+            return;
+        }
+        
         DateTime today = DateTime.Today;
-        string countdownMessage = CountdownService.GetCountdownMessage(today, releaseDate);
-
-        int daysUntilRelease = (releaseDate - today).Days;
+        int daysUntilRelease = (config.TargetDate - today).Days;
         if (daysUntilRelease < 0)
         {
-            Console.WriteLine("Arc Raiders has already been released.");
+            Console.WriteLine($"{config.RequiredService} has already been released.");
             return;
         }
-
-        if (webhookUrl == null)
-        {
-            Console.WriteLine("DISCORD_WEBHOOK environment variable is not set.");
-            return;
-        }
-
+        
         using var httpClient = new HttpClient();
-        var service = new WebService(httpClient);
-        await service.SendDiscordMessage(webhookUrl, countdownMessage);
+        switch (config.RequiredService)
+        {
+            case "Arc Raiders":
+                Console.WriteLine($"Using {config.RequiredService} Service");
+                string countdownMessage = ArcRaidersService.GetCountdownMessage(today, config.TargetDate);
+                var service = new ArcRaidersService(httpClient);
+                await service.SendDiscordMessage(config.WebhookUrl, countdownMessage);
+                break;
+            default:
+                Console.WriteLine($"Service '{config.RequiredService}' is not recognized.");
+                return;
+        }
+        
     }
 }
 
