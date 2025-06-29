@@ -1,5 +1,5 @@
 
-# ArcRaidersCountdown
+# Simple Countdown
 
 A simple C# console app that sends a countdown message to a Discord webhook for a service release. Currently supports Arc Raiders, but services can be added as needed.
 
